@@ -20,7 +20,6 @@ import static blacksmith.post.redis.service.LoginMemberService.SESSION_COOKIE_NA
 
 @RestController
 @RequiredArgsConstructor
-//@CrossOrigin("*")
 @Slf4j
 @RequestMapping("/member")
 public class MemberController {
