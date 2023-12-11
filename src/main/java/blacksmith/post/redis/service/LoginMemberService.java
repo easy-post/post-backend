@@ -22,7 +22,7 @@ public class LoginMemberService {
 
     public static final String SESSION_COOKIE_NAME = "sessionId";
     private static final int SESSION_EXPIRATION_TIME = 9999999;
-    private static final String SESSION_COOKIE_DOMAIN = "post-react.onrender.com";
+    private static final String SESSION_COOKIE_DOMAIN = "post-react";
 
     public LoginMemberService(LoginMemberRepository loginMemberRepository) {
         this.loginMemberRepository = loginMemberRepository;
@@ -37,7 +37,7 @@ public class LoginMemberService {
         ResponseCookie.ResponseCookieBuilder cookieBuilder = from(SESSION_COOKIE_NAME, sessionId);
         cookieBuilder.maxAge(SESSION_EXPIRATION_TIME);
         cookieBuilder.secure(true);
-        cookieBuilder.sameSite("None");
+        cookieBuilder.sameSite("none");
         cookieBuilder.path("/");
         cookieBuilder.domain(SESSION_COOKIE_DOMAIN);
         cookieBuilder.httpOnly(true);
@@ -82,7 +82,7 @@ public class LoginMemberService {
         ResponseCookie.ResponseCookieBuilder cookieBuilder = from(SESSION_COOKIE_NAME, sessionId);
         cookieBuilder.maxAge(maxAgeSeconds);
         cookieBuilder.secure(true);
-        cookieBuilder.sameSite("None");
+        cookieBuilder.sameSite("none");
         cookieBuilder.path("/");
         cookieBuilder.httpOnly(true);
         cookieBuilder.domain(SESSION_COOKIE_DOMAIN);
