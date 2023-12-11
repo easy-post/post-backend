@@ -34,8 +34,6 @@ public class LoginMemberService {
         String sessionId = UUID.randomUUID().toString();
         LoginMember loginMember = new LoginMember(sessionId, memberInfoDto, SESSION_EXPIRATION_TIME);
         loginMemberRepository.save(loginMember);
-        Cookie cookie = new Cookie("hello", "hi");
-        response.addCookie(cookie);
         updateCookieTime(sessionId, SESSION_EXPIRATION_TIME, response);
 
         log.info("쿠키생성");
@@ -82,7 +80,7 @@ public class LoginMemberService {
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Origin", "https://post-react.onrender.com");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        response.addHeader("Set-Cookie", cookieBuilder.build().toString());
+        response.setHeader("Set-Cookie", cookieBuilder.build().toString());
         log.info("cookie: {}",cookieBuilder.build().toString());
     }
 }
