@@ -4,6 +4,7 @@ import blacksmith.post.domain.dtos.member.LoginSessionDto;
 import blacksmith.post.domain.dtos.member.MemberInfoDto;
 import blacksmith.post.redis.entity.LoginMember;
 import blacksmith.post.redis.repository.LoginMemberRepository;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,8 @@ public class LoginMemberService {
         String sessionId = UUID.randomUUID().toString();
         LoginMember loginMember = new LoginMember(sessionId, memberInfoDto, SESSION_EXPIRATION_TIME);
         loginMemberRepository.save(loginMember);
+        Cookie cookie = new Cookie("hello", "hi");
+        response.addCookie(cookie);
         updateCookieTime(sessionId, SESSION_EXPIRATION_TIME, response);
 
         log.info("쿠키생성");
