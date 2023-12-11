@@ -21,8 +21,8 @@ public class LoginMemberService {
     private final LoginMemberRepository loginMemberRepository;
 
     public static final String SESSION_COOKIE_NAME = "sessionId";
-    private static final int SESSION_EXPIRATION_TIME = 9999999;
-    private static final String SESSION_COOKIE_DOMAIN = "post-react";
+    private static final int SESSION_EXPIRATION_TIME = 1800;
+    private static final String SESSION_COOKIE_DOMAIN = "post-react.onrender.com";
 
     public LoginMemberService(LoginMemberRepository loginMemberRepository) {
         this.loginMemberRepository = loginMemberRepository;
@@ -33,20 +33,9 @@ public class LoginMemberService {
         String sessionId = UUID.randomUUID().toString();
         LoginMember loginMember = new LoginMember(sessionId, memberInfoDto, SESSION_EXPIRATION_TIME);
         loginMemberRepository.save(loginMember);
-
-        ResponseCookie.ResponseCookieBuilder cookieBuilder = from(SESSION_COOKIE_NAME, sessionId);
-        cookieBuilder.maxAge(SESSION_EXPIRATION_TIME);
-        cookieBuilder.secure(true);
-        cookieBuilder.sameSite("none");
-        cookieBuilder.path("/");
-        cookieBuilder.domain(SESSION_COOKIE_DOMAIN);
-        cookieBuilder.httpOnly(true);
-
-        response.setHeader("Access-Control-Allow-Credentials", "true");
+        updateCookieTime(sessionId, SESSION_EXPIRATION_TIME, response);
 
         log.info("쿠키생성");
-        response.addHeader("Set-Cookie", cookieBuilder.build().toString());
-        log.info("cookie: {}",cookieBuilder.build().toString());
         return new LoginSessionDto(sessionId, true);
     }
 
@@ -82,13 +71,15 @@ public class LoginMemberService {
         ResponseCookie.ResponseCookieBuilder cookieBuilder = from(SESSION_COOKIE_NAME, sessionId);
         cookieBuilder.maxAge(maxAgeSeconds);
         cookieBuilder.secure(true);
-        cookieBuilder.sameSite("none");
+        cookieBuilder.sameSite("None");
         cookieBuilder.path("/");
         cookieBuilder.httpOnly(true);
         cookieBuilder.domain(SESSION_COOKIE_DOMAIN);
 
         response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Origin", "https://post-react.onrender.com");
         response.addHeader("Set-Cookie", cookieBuilder.build().toString());
+        log.info("cookie: {}",cookieBuilder.build().toString());
     }
 }
 
