@@ -22,7 +22,7 @@ public class LoginMemberService {
 
     public static final String SESSION_COOKIE_NAME = "sessionId";
     private static final int SESSION_EXPIRATION_TIME = 1800;
-    private static final String SESSION_COOKIE_DOMAIN = "post-react.onrender.com";
+    private static final String SESSION_COOKIE_DOMAIN = ".post-react.onrender.com";
 
     public LoginMemberService(LoginMemberRepository loginMemberRepository) {
         this.loginMemberRepository = loginMemberRepository;
@@ -78,6 +78,7 @@ public class LoginMemberService {
 
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Origin", "https://post-react.onrender.com");
+        response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.addHeader("Set-Cookie", cookieBuilder.build().toString());
         log.info("cookie: {}",cookieBuilder.build().toString());
     }
