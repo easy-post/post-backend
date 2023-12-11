@@ -1,14 +1,14 @@
 package blacksmith.post.service;
 
 import blacksmith.post.domain.Member;
-import blacksmith.post.domain.dtos.LoginSessionDto;
-import blacksmith.post.domain.dtos.MemberInfoDto;
-import blacksmith.post.domain.dtos.MemberLoginDto;
-import blacksmith.post.domain.dtos.MemberRegisterDto;
+import blacksmith.post.domain.dtos.member.LoginSessionDto;
+import blacksmith.post.domain.dtos.member.MemberInfoDto;
+import blacksmith.post.domain.dtos.member.MemberLoginDto;
+import blacksmith.post.domain.dtos.member.MemberRegisterDto;
 import blacksmith.post.exceptions.hash.HashNoSuchAlgorithmException;
 import blacksmith.post.exceptions.member.MemberLoginIdDuplicateException;
+import blacksmith.post.redis.service.LoginMemberService;
 import blacksmith.post.repository.MemberRepository;
-import blacksmith.post.session.LoginSessionManager;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ import java.util.Optional;
 @Slf4j
 public class MemberService {
     private final MemberRepository memberRepository;
-    private final LoginSessionManager loginSessionManager;
+    private final LoginMemberService loginMemberService;
     private final Hash hash = new Hash();
 
     public void register(MemberRegisterDto registerDto) {
@@ -55,17 +55,25 @@ public class MemberService {
         return true;
     }
 
-    public Optional<LoginSessionDto> login(MemberLoginDto loginDto){
+    public Optional<LoginSessionDto> login(MemberLoginDto loginDto,  HttpServletResponse response){
         Optional<Member> findMember = memberRepository.findByLoginId(loginDto.getLoginId());
         if(findMember.isPresent()){
             String hashPwd = hash.encrypt(loginDto.getPassword());
             Member extractMember = findMember.get();
             if(extractMember.getPassword().equals(hashPwd)){
                 MemberInfoDto memberInfo = new MemberInfoDto(extractMember.getId(), loginDto.getLoginId(), extractMember.getNickname());
-                return Optional.of(loginSessionManager.createSession(memberInfo));
+                return Optional.of(loginMemberService.createSession(memberInfo, response));
             }
         }
         return Optional.empty();
+    }
+
+    public void expireLoginSession(String sessionId, HttpServletResponse response){
+        loginMemberService.expireAll(sessionId, response);
+    }
+
+    public Optional<MemberInfoDto> getLoginMember(String sessionId, HttpServletResponse response){
+        return loginMemberService.getMemberInfoBySessionId(sessionId, response);
     }
 
 

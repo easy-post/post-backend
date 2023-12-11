@@ -1,4 +1,4 @@
-package blacksmith.post.domain.dtos;
+package blacksmith.post.domain.dtos.member;
 
 import lombok.Data;
 

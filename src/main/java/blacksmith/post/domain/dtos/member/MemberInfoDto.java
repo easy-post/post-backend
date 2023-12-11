@@ -1,4 +1,4 @@
-package blacksmith.post.domain.dtos;
+package blacksmith.post.domain.dtos.member;
 
 import blacksmith.post.domain.Member;
 import lombok.Data;
@@ -19,5 +19,12 @@ public class MemberInfoDto {
         this.id = id;
         this.loginId = loginId;
         this.nickname = nickname;
+    }
+
+    public MemberInfoDto(){
+    }
+
+    public Member toMemberWithoutPwd(){
+        return new Member(this.id, this.loginId, this.nickname);
     }
 }

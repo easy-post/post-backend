@@ -31,4 +31,10 @@ public class Member extends BaseEntity {
         this.password = password;
         this.nickname = nickname;
     }
+
+    public Member(Long id, String loginId, String nickname){
+        this.id = id;
+        this.loginId = loginId;
+        this.nickname = nickname;
+    }
 }

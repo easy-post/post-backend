@@ -1,6 +1,8 @@
 package blacksmith.post.exceptions.member;
 
-public class MemberException extends RuntimeException{
+import blacksmith.post.exceptions.UserException;
+
+public class MemberException extends UserException {
     public MemberException(String message) {
         super(message);
     }

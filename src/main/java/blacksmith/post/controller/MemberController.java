@@ -1,33 +1,28 @@
 package blacksmith.post.controller;
 
-import blacksmith.post.domain.Member;
-import blacksmith.post.domain.dtos.*;
-import blacksmith.post.exceptions.member.MemberInvalidLoginException;
-import blacksmith.post.exceptions.member.MemberLoginValidException;
-import blacksmith.post.exceptions.member.MemberRegisterBlankException;
-import blacksmith.post.exceptions.member.MemberRegisterValidException;
+import blacksmith.post.domain.dtos.member.*;
+import blacksmith.post.exceptions.member.*;
 import blacksmith.post.service.MemberService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
+
+import static blacksmith.post.redis.service.LoginMemberService.SESSION_COOKIE_NAME;
+
 
 @RestController
 @RequiredArgsConstructor
 //@CrossOrigin("*")
 @Slf4j
+@RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
 
@@ -54,23 +49,37 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public LoginSessionDto login(@Validated @RequestBody MemberLoginDto loginDto, BindingResult bindingResult){
+    public void login(@Validated @RequestBody MemberLoginDto loginDto, BindingResult bindingResult, HttpServletResponse response){
         if(bindingResult.hasErrors()){
             throw new MemberLoginValidException("입력값을 다시 확인 해 주세요.");
         }
-        Optional<LoginSessionDto> sessionDto = memberService.login(loginDto);
-        if(sessionDto.isPresent()){
-            return sessionDto.get();
-        }else{
+
+        Optional<LoginSessionDto> sessionDto = memberService.login(loginDto, response);
+
+        if(sessionDto.isEmpty()){
             throw new MemberInvalidLoginException("아이디나 패스워드가 일치하지 않습니다.");
         }
     }
 
-    @GetMapping("/valid/login")
-    public void validLogin(@CookieValue(name = "sessionId", required = false) String sessionId ,HttpServletRequest request, HttpServletResponse response){
-        String origin = request.getHeader("Origin");
-        log.info("origin : {}",origin);
-        log.info("cookie : {}",sessionId);
-        log.info("time : {}", LocalTime.now());
+    @GetMapping("/valid-login")
+    public MemberInfoDto validLogin(@CookieValue(name = SESSION_COOKIE_NAME, required = false) String sessionId , HttpServletResponse response){
+        if(sessionId == null){
+            throw new MemberNotLoginException("로그인 한 상태가 아닙니다.");
+        }
+        Optional<MemberInfoDto> loginMemberInfo = memberService.getLoginMember(sessionId, response);
+        if(loginMemberInfo.isPresent()){
+            return loginMemberInfo.get();
+        }else {
+            throw new MemberNotLoginException("다시 로그인 해 주세요.");
+        }
     }
+
+
+
+    @GetMapping("/logout")
+    public void logout(@CookieValue(name = SESSION_COOKIE_NAME, required = false) String sessionId, HttpServletRequest request, HttpServletResponse response){
+        memberService.expireLoginSession(sessionId, response);
+    }
+
+
 }

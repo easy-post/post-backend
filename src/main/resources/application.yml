@@ -4,10 +4,14 @@ spring:
     username: post_wws2_user
     password: e7XBsjEXI8sHdFY3TQmsfoU6xZRSAJiF
     driver-class-name: org.postgresql.Driver
+  data:
+    redis:
+      host: localhost
+      port: 6379
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -16,3 +20,4 @@ spring:
 logging:
   level:
     org.hibernate.SQL: debug
+#    org.springframework: debug
