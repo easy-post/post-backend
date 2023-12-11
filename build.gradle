@@ -49,8 +49,8 @@ tasks.named('test') {
 	useJUnitPlatform()
 }
 
-def generated = 'src/main/generated'
-//def generated = layout.buildDirectory.dir("generated/querydsl").get().asFile
+//def generated = 'src/main/generated'
+def generated = layout.buildDirectory.dir("generated/querydsl").get().asFile
 
 querydsl {
 	jpa = true
