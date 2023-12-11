@@ -38,7 +38,7 @@ public class LoginMemberService {
         cookieBuilder.secure(true);
         cookieBuilder.sameSite("None");
         cookieBuilder.path("/");
-        cookieBuilder.domain("127.0.0.1");
+        cookieBuilder.domain("post-react.onrender.com");
 
         log.info("쿠키생성");
         response.addHeader("Set-Cookie", cookieBuilder.build().toString());
@@ -80,6 +80,7 @@ public class LoginMemberService {
         cookieBuilder.secure(true);
         cookieBuilder.sameSite("None");
         cookieBuilder.path("/");
+        cookieBuilder.domain("post-react.onrender.com");
         response.addHeader("Set-Cookie", cookieBuilder.build().toString());
     }
 }
