@@ -42,6 +42,8 @@ public class LoginMemberService {
         cookieBuilder.domain(SESSION_COOKIE_DOMAIN);
         cookieBuilder.httpOnly(true);
 
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+
         log.info("쿠키생성");
         response.addHeader("Set-Cookie", cookieBuilder.build().toString());
         log.info("cookie: {}",cookieBuilder.build().toString());
@@ -84,6 +86,8 @@ public class LoginMemberService {
         cookieBuilder.path("/");
         cookieBuilder.httpOnly(true);
         cookieBuilder.domain(SESSION_COOKIE_DOMAIN);
+
+        response.setHeader("Access-Control-Allow-Credentials", "true");
         response.addHeader("Set-Cookie", cookieBuilder.build().toString());
     }
 }
