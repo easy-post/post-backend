@@ -35,7 +35,7 @@ public class LoginMemberService {
 
         ResponseCookie.ResponseCookieBuilder cookieBuilder = from(SESSION_COOKIE_NAME, sessionId);
         cookieBuilder.maxAge(SESSION_EXPIRATION_TIME);
-        cookieBuilder.secure(true);
+//        cookieBuilder.secure(true);
         cookieBuilder.sameSite("None");
         cookieBuilder.path("/");
         cookieBuilder.domain("post-react.onrender.com");
@@ -77,7 +77,7 @@ public class LoginMemberService {
     private static void updateCookieTime(String sessionId, int maxAgeSeconds, HttpServletResponse response) {
         ResponseCookie.ResponseCookieBuilder cookieBuilder = from(SESSION_COOKIE_NAME, sessionId);
         cookieBuilder.maxAge(maxAgeSeconds);
-        cookieBuilder.secure(true);
+//        cookieBuilder.secure(true);
         cookieBuilder.sameSite("None");
         cookieBuilder.path("/");
         cookieBuilder.domain("post-react.onrender.com");
