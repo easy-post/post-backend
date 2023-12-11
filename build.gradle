@@ -3,7 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '3.2.0'
 	id 'io.spring.dependency-management' version '1.1.4'
 
-	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+//	id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
 }
 
 group = 'blacksmith'
@@ -45,28 +45,28 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
-
-//def generated = 'src/main/generated'
-def generated = layout.buildDirectory.dir("generated/querydsl").get().asFile
-
-querydsl {
-	jpa = true
-	querydslSourcesDir = generated
-}
-sourceSets {
-	main.java.srcDir generated
-}
-
-compileQuerydsl{
-	options.annotationProcessorPath = configurations.querydsl
-}
-
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-	querydsl.extendsFrom compileClasspath
-}
+//tasks.named('test') {
+//	useJUnitPlatform()
+//}
+//
+////def generated = 'src/main/generated'
+//def generated = layout.buildDirectory.dir("generated/querydsl").get().asFile
+//
+//querydsl {
+//	jpa = true
+//	querydslSourcesDir = generated
+//}
+//sourceSets {
+//	main.java.srcDir generated
+//}
+//
+//compileQuerydsl{
+//	options.annotationProcessorPath = configurations.querydsl
+//}
+//
+//configurations {
+//	compileOnly {
+//		extendsFrom annotationProcessor
+//	}
+//	querydsl.extendsFrom compileClasspath
+//}
