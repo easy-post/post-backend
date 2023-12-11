@@ -36,7 +36,7 @@ public class MemberController {
         return new ValidDto(true);
     }
 
-    @GetMapping("/")
+    @GetMapping
     public List<MemberInfoDto> showMembers(){
         return memberService.findAll();
     }

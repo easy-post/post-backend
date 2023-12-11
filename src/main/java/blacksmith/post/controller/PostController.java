@@ -11,6 +11,7 @@ import blacksmith.post.exceptions.member.MemberNotLoginException;
 import blacksmith.post.exceptions.post.PostNotExistException;
 import blacksmith.post.service.MemberService;
 import blacksmith.post.service.PostService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,7 +61,8 @@ public class PostController {
     }
 
     @GetMapping
-    public Page<PostListElementDto> getPostEls(PostSearchCondition condition, Pageable pageable){
+    public Page<PostListElementDto> getPostEls(PostSearchCondition condition, Pageable pageable, HttpServletRequest request){
+        log.info("uri : {}", request.getRequestURI());
         return postService.getPostElements(condition, pageable);
     }
 
