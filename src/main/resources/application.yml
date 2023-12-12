@@ -21,3 +21,10 @@ logging:
   level:
     org.hibernate.SQL: debug
 #    org.springframework: debug
+
+server:
+  servlet:
+    session:
+      cookie:
+        same-site: none
+        secure: true

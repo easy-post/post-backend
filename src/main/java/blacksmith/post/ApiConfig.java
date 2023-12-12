@@ -21,6 +21,7 @@ public class ApiConfig implements WebMvcConfigurer {
                 .allowedOrigins("https://post-react.onrender.com")
                 .allowCredentials(true)
                 .allowedMethods("GET", "POST", "OPTIONS")
-                .allowedHeaders("*");
+                .allowedHeaders("*")
+                .exposedHeaders("Authorization", "Set-cookie");
     }
 }
