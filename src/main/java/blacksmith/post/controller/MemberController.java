@@ -62,8 +62,22 @@ public class MemberController {
         return sessionDto.get();
     }
 
+//    @GetMapping("/valid-login")
+//    public MemberInfoDto validLogin(@CookieValue(name = SESSION_COOKIE_NAME, required = false) String sessionId , HttpServletResponse response){
+//        log.info("sessionId : {}", sessionId);
+//        if(sessionId == null){
+//            throw new MemberNotLoginException("로그인 한 상태가 아닙니다.");
+//        }
+//        Optional<MemberInfoDto> loginMemberInfo = memberService.getLoginMember(sessionId, response);
+//        if(loginMemberInfo.isPresent()){
+//            return loginMemberInfo.get();
+//        }else {
+//            throw new MemberNotLoginException("다시 로그인 해 주세요.");
+//        }
+//    }
+
     @GetMapping("/valid-login")
-    public MemberInfoDto validLogin(@CookieValue(name = SESSION_COOKIE_NAME, required = false) String sessionId , HttpServletResponse response){
+    public MemberInfoDto validLogin(@RequestBody(required = false) String sessionId, HttpServletResponse response){
         log.info("sessionId : {}", sessionId);
         if(sessionId == null){
             throw new MemberNotLoginException("로그인 한 상태가 아닙니다.");
