@@ -1,5 +1,6 @@
 package blacksmith.post.domain.dtos.post;
 
+import blacksmith.post.domain.Post;
 import lombok.Data;
 
 import java.time.LocalDateTime;

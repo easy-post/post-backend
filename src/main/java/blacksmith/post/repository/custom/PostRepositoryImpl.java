@@ -1,5 +1,6 @@
 package blacksmith.post.repository.custom;
 
+import blacksmith.post.domain.Post;
 import blacksmith.post.domain.QMember;
 import blacksmith.post.domain.QPost;
 import blacksmith.post.domain.dtos.post.PostListElementDto;
@@ -10,6 +11,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -43,6 +45,22 @@ public class PostRepositoryImpl implements PostCustomRepository{
                 .where(nicknameEq(condition.getNickname()), titleLike(condition.getTitle()));
 
         return PageableExecutionUtils.getPage(postEls, pageable, countQuery::fetchOne);
+    }
+
+    @Override
+    public Page<PostListElementDto> getPostListByMemberId(Long memberId, Pageable pageable) {
+        List<PostListElementDto> postEls = query.select(Projections.constructor(PostListElementDto.class, p.id, p.title, m.nickname, p.createdDate))
+                .from(p).join(p.member, m)
+                .where(m.id.eq(memberId))
+                .orderBy(p.createdDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        TypedQuery<Long> countQuery = em.createQuery("select count(p) from Post p where p.member = :memberId", Long.class)
+                .setParameter("memberId", memberId);
+
+        return PageableExecutionUtils.getPage(postEls, pageable,countQuery::getSingleResult);
     }
 
 

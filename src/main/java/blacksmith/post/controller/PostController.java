@@ -2,11 +2,7 @@ package blacksmith.post.controller;
 
 
 import blacksmith.post.domain.dtos.member.MemberInfoDto;
-import blacksmith.post.domain.dtos.post.PostDto;
-import blacksmith.post.domain.dtos.post.PostListElementDto;
-import blacksmith.post.domain.dtos.post.PostSaveResultDto;
-import blacksmith.post.domain.dtos.post.PostSearchCondition;
-import blacksmith.post.exceptions.member.MemberInvalidLoginException;
+import blacksmith.post.domain.dtos.post.*;
 import blacksmith.post.exceptions.member.MemberNotLoginException;
 import blacksmith.post.exceptions.post.PostNotExistException;
 import blacksmith.post.service.MemberService;
@@ -19,10 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
-
-import static blacksmith.post.redis.service.LoginMemberService.SESSION_COOKIE_NAME;
 
 @RestController
 @RequestMapping("/post")
@@ -66,4 +59,12 @@ public class PostController {
         return postService.getPostElements(condition, pageable);
     }
 
+    @PostMapping("/member")
+    public Page<PostListElementDto> getPostElsByMemberId(@RequestBody PostListBySessionDto postListBySession, HttpServletResponse response){
+        Optional<MemberInfoDto> loginMember = memberService.getLoginMember(postListBySession.getSessionId(), response);
+        if(loginMember.isEmpty()){
+            throw new MemberNotLoginException("다시 로그인 해 주세요.");
+        }
+        return postService.getPostElementsByMember(loginMember.get(), postListBySession.getPageable());
+    }
 }

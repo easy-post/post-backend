@@ -2,6 +2,7 @@ package blacksmith.post.service;
 
 import blacksmith.post.domain.Member;
 import blacksmith.post.domain.Post;
+import blacksmith.post.domain.dtos.member.MemberInfoDto;
 import blacksmith.post.domain.dtos.post.PostDto;
 import blacksmith.post.domain.dtos.post.PostListElementDto;
 import blacksmith.post.domain.dtos.post.PostSearchCondition;
@@ -46,5 +47,9 @@ public class PostService {
 
     public Page<PostListElementDto> getPostElements(PostSearchCondition condition, Pageable pageable){
         return postRepository.getPostListByPage(condition, pageable);
+    }
+
+    public Page<PostListElementDto> getPostElementsByMember(MemberInfoDto memberInfo, Pageable pageable){
+        return postRepository.getPostListByMemberId(memberInfo.getId(), pageable);
     }
 }
