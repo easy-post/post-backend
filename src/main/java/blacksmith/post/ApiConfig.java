@@ -17,7 +17,6 @@ public class ApiConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-//        로그인 주소와 react 주소 (나중에는 둘이 통합하여 frontend 서버 주소)
         registry.addMapping("/**")
                 .allowedOrigins("https://post-react.onrender.com")
                 .allowCredentials(true)
