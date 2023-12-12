@@ -69,24 +69,18 @@ public class LoginMemberService {
     }
 
     private static String updateCookieTime(String sessionId, int maxAgeSeconds, HttpServletResponse response) {
-        Cookie cookie = new Cookie("cookie", "good-cookie");
         ResponseCookie.ResponseCookieBuilder cookieBuilder = from(SESSION_COOKIE_NAME, sessionId);
         cookieBuilder.maxAge(maxAgeSeconds);
         cookieBuilder.secure(true);
         cookieBuilder.sameSite("None");
         cookieBuilder.path("/");
-        cookieBuilder.httpOnly(false);
+        cookieBuilder.httpOnly(true);
         cookieBuilder.domain(SESSION_COOKIE_DOMAIN);
 
-        cookie.setDomain(SESSION_COOKIE_DOMAIN);
-        cookie.setPath("/");
-
-        response.addCookie(cookie);
-
-//        response.setHeader("Access-Control-Allow-Credentials", "true");
-//        response.setHeader("Access-Control-Allow-Headers", "Content-type, Authorization");
-//        response.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-//        response.setHeader("Access-Control-Allow-Origin", "https://post-react.onrender.com");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Headers", "Content-type, Authorization, Credentials");
+        response.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+        response.setHeader("Access-Control-Allow-Origin", "https://post-react.onrender.com");
 
         response.setHeader("Set-Cookie", cookieBuilder.build().toString());
         log.info("cookie: {}",cookieBuilder.build().toString());
