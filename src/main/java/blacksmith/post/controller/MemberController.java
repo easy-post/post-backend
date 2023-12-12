@@ -64,6 +64,7 @@ public class MemberController {
 
     @GetMapping("/valid-login")
     public MemberInfoDto validLogin(@CookieValue(name = SESSION_COOKIE_NAME, required = false) String sessionId , HttpServletResponse response){
+        log.info("sessionId : {}", sessionId);
         if(sessionId == null){
             throw new MemberNotLoginException("로그인 한 상태가 아닙니다.");
         }
