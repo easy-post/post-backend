@@ -76,7 +76,7 @@ public class LoginMemberService {
         cookieBuilder.secure(true);
         cookieBuilder.sameSite("None");
         cookieBuilder.path("/");
-        cookieBuilder.httpOnly(true);
+        cookieBuilder.httpOnly(false);
         cookieBuilder.domain(SESSION_COOKIE_DOMAIN);
 
         response.setHeader("Access-Control-Allow-Credentials", "true");
