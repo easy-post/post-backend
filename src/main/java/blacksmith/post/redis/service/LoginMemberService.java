@@ -69,6 +69,7 @@ public class LoginMemberService {
     }
 
     private static String updateCookieTime(String sessionId, int maxAgeSeconds, HttpServletResponse response) {
+        Cookie cookie = new Cookie("cookie", "good cookie");
         ResponseCookie.ResponseCookieBuilder cookieBuilder = from(SESSION_COOKIE_NAME, sessionId);
         cookieBuilder.maxAge(maxAgeSeconds);
         cookieBuilder.secure(true);
@@ -76,6 +77,8 @@ public class LoginMemberService {
         cookieBuilder.path("/");
         cookieBuilder.httpOnly(false);
         cookieBuilder.domain(SESSION_COOKIE_DOMAIN);
+
+        response.addCookie(cookie);
 
         response.setHeader("Set-Cookie", cookieBuilder.build().toString());
         log.info("cookie: {}",cookieBuilder.build().toString());
