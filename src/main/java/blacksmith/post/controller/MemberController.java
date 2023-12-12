@@ -2,6 +2,7 @@ package blacksmith.post.controller;
 
 import blacksmith.post.domain.dtos.member.*;
 import blacksmith.post.exceptions.member.*;
+import blacksmith.post.redis.service.LoginMemberService;
 import blacksmith.post.service.MemberService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +25,8 @@ import static blacksmith.post.redis.service.LoginMemberService.SESSION_COOKIE_NA
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
+    private final LoginMemberService loginMemberService;
+
 
     @PostMapping("/register")
     public ValidDto register(@Validated @RequestBody MemberRegisterDto registerDto, BindingResult bindingResult){
@@ -49,6 +52,7 @@ public class MemberController {
 
     @PostMapping("/login")
     public LoginSessionDto login(@Validated @RequestBody MemberLoginDto loginDto, BindingResult bindingResult, HttpServletResponse response){
+        memberService.login(loginDto, response);
         if(bindingResult.hasErrors()){
             throw new MemberLoginValidException("입력값을 다시 확인 해 주세요.");
         }
