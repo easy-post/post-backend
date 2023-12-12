@@ -34,11 +34,11 @@ public class PostController {
 
 //    글을 쓰는 도중에 로그아웃되서 로그인 해야하는.. 그거를 좀 리액트쪽에서 React.memo 이런 걸로 되나? 글을 기억시키는?
     @PostMapping("/save")
-    public PostSaveResultDto save(@CookieValue(name = SESSION_COOKIE_NAME, required = false) String sessionId, @RequestBody PostDto postDto, HttpServletResponse response){
-        if(sessionId == null){
+    public PostSaveResultDto save(@RequestBody PostDto postDto, HttpServletResponse response){
+        if(postDto.getSessionId() == null){
             throw new MemberNotLoginException("다시 로그인 해 주세요.");
         }
-        Optional<MemberInfoDto> loginMember = memberService.getLoginMember(sessionId, response);
+        Optional<MemberInfoDto> loginMember = memberService.getLoginMember(postDto.getSessionId(), response);
         if(loginMember.isEmpty()){
             throw new MemberNotLoginException("다시 로그인 해 주세요.");
         }

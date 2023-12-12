@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class PostDto {
+    private String sessionId;
     private Long id;
     private MemberInfoDto memberInfoDto;
     private String title;
