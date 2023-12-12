@@ -76,7 +76,7 @@ public class MemberController {
 //        }
 //    }
 
-    @GetMapping("/valid-login")
+    @PostMapping("/valid-login")
     public MemberInfoDto validLogin(@RequestBody(required = false) String sessionId, HttpServletResponse response){
         log.info("sessionId : {}", sessionId);
         if(sessionId == null){
@@ -90,12 +90,8 @@ public class MemberController {
         }
     }
 
-
-
     @GetMapping("/logout")
     public void logout(@CookieValue(name = SESSION_COOKIE_NAME, required = false) String sessionId, HttpServletRequest request, HttpServletResponse response){
         memberService.expireLoginSession(sessionId, response);
     }
-
-
 }
