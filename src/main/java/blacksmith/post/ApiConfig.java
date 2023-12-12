@@ -18,10 +18,8 @@ public class ApiConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("https://post-react.onrender.com")
+                .allowedOrigins("*")
                 .allowCredentials(true)
-                .allowedMethods("GET", "POST", "PUT", "DELETE")
-                .allowedHeaders("Authorization", "Content-type")
-                .maxAge(1800);
+                .allowedMethods("GET", "POST", "PUT", "DELETE");
     }
 }
