@@ -48,7 +48,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public void login(@Validated @CookieValue MemberLoginDto loginDto, BindingResult bindingResult, HttpServletResponse response){
+    public LoginSessionDto login(@Validated MemberLoginDto loginDto, BindingResult bindingResult, HttpServletResponse response){
         if(bindingResult.hasErrors()){
             throw new MemberLoginValidException("입력값을 다시 확인 해 주세요.");
         }
@@ -59,7 +59,7 @@ public class MemberController {
             throw new MemberInvalidLoginException("아이디나 패스워드가 일치하지 않습니다.");
         }
 
-        return;
+        return sessionDto.get();
     }
 
     @GetMapping("/valid-login")
