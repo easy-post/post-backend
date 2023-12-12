@@ -22,7 +22,6 @@ public class ApiConfig implements WebMvcConfigurer {
                 .allowCredentials(true)
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 .allowedHeaders("Authorization", "Content-type")
-                .exposedHeaders("Custom-Header")
                 .maxAge(1800);
     }
 }

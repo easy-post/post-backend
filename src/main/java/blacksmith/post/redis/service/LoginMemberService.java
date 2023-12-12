@@ -74,7 +74,6 @@ public class LoginMemberService {
         cookieBuilder.secure(true);
         cookieBuilder.sameSite("None");
         cookieBuilder.path("/");
-        cookieBuilder.httpOnly(true);
         cookieBuilder.domain(SESSION_COOKIE_DOMAIN);
 
         response.setHeader("Set-Cookie", cookieBuilder.build().toString());
