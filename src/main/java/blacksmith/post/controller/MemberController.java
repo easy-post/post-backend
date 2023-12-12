@@ -48,7 +48,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public LoginSessionDto login(@Validated @RequestBody MemberLoginDto loginDto, BindingResult bindingResult, HttpServletResponse response){
+    public void login(@Validated @CookieValue MemberLoginDto loginDto, BindingResult bindingResult, HttpServletResponse response){
         if(bindingResult.hasErrors()){
             throw new MemberLoginValidException("입력값을 다시 확인 해 주세요.");
         }
@@ -59,7 +59,7 @@ public class MemberController {
             throw new MemberInvalidLoginException("아이디나 패스워드가 일치하지 않습니다.");
         }
 
-        return sessionDto.get();
+        return;
     }
 
     @GetMapping("/valid-login")
@@ -76,19 +76,6 @@ public class MemberController {
         }
     }
 
-//    @PostMapping("/valid-login")
-//    public MemberInfoDto validLogin(@RequestBody(required = false) String sessionId, HttpServletResponse response){
-//        log.info("sessionId : {}", sessionId);
-//        if(sessionId == null){
-//            throw new MemberNotLoginException("로그인 한 상태가 아닙니다.");
-//        }
-//        Optional<MemberInfoDto> loginMemberInfo = memberService.getLoginMember(sessionId, response);
-//        if(loginMemberInfo.isPresent()){
-//            return loginMemberInfo.get();
-//        }else {
-//            throw new MemberNotLoginException("다시 로그인 해 주세요.");
-//        }
-//    }
 
     @GetMapping("/logout")
     public void logout(@CookieValue(name = SESSION_COOKIE_NAME, required = false) String sessionId, HttpServletRequest request, HttpServletResponse response){
