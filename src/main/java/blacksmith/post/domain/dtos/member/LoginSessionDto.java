@@ -6,10 +6,12 @@ import lombok.Data;
 public class LoginSessionDto {
     private String sessionId;
     private boolean success;
+    private String cookieStr;
 
-    public LoginSessionDto(String sessionId, boolean success) {
+    public LoginSessionDto(String sessionId, boolean success, String cookieStr) {
         this.sessionId = sessionId;
         this.success = success;
+        this.cookieStr = cookieStr;
     }
 
     public LoginSessionDto() {

@@ -23,7 +23,7 @@ public class LoginMemberService {
 
     public static final String SESSION_COOKIE_NAME = "sessionId";
     private static final int SESSION_EXPIRATION_TIME = 1800;
-    private static final String SESSION_COOKIE_DOMAIN = "post-react.onrender.com";
+    private static final String SESSION_COOKIE_DOMAIN = ".onrender.com";
 
     public LoginMemberService(LoginMemberRepository loginMemberRepository) {
         this.loginMemberRepository = loginMemberRepository;
@@ -34,10 +34,10 @@ public class LoginMemberService {
         String sessionId = UUID.randomUUID().toString();
         LoginMember loginMember = new LoginMember(sessionId, memberInfoDto, SESSION_EXPIRATION_TIME);
         loginMemberRepository.save(loginMember);
-        updateCookieTime(sessionId, SESSION_EXPIRATION_TIME, response);
+        String cookieStr = updateCookieTime(sessionId, SESSION_EXPIRATION_TIME, response);
 
         log.info("쿠키생성");
-        return new LoginSessionDto(sessionId, true);
+        return new LoginSessionDto(sessionId, true, cookieStr);
     }
 
     public Optional<MemberInfoDto> getMemberInfoBySessionId(String sessionId, HttpServletResponse response){
@@ -68,16 +68,18 @@ public class LoginMemberService {
         updateCookieTime(sessionId, 0, response);
     }
 
-    private static void updateCookieTime(String sessionId, int maxAgeSeconds, HttpServletResponse response) {
+    private static String updateCookieTime(String sessionId, int maxAgeSeconds, HttpServletResponse response) {
         ResponseCookie.ResponseCookieBuilder cookieBuilder = from(SESSION_COOKIE_NAME, sessionId);
         cookieBuilder.maxAge(maxAgeSeconds);
         cookieBuilder.secure(true);
         cookieBuilder.sameSite("None");
         cookieBuilder.path("/");
+        cookieBuilder.httpOnly(false);
         cookieBuilder.domain(SESSION_COOKIE_DOMAIN);
 
         response.setHeader("Set-Cookie", cookieBuilder.build().toString());
         log.info("cookie: {}",cookieBuilder.build().toString());
+        return cookieBuilder.build().toString();
     }
 }
 
