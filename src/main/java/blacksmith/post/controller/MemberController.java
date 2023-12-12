@@ -76,7 +76,7 @@ public class MemberController {
 //        }
 //    }
 
-    @GetMapping("/valid-login")
+    @PostMapping("/valid-login")
     public MemberInfoDto validLogin(@CookieValue(name = "sessionId",required = false) String sessionId, HttpServletResponse response){
         log.info("sessionId : {}", sessionId);
         if(sessionId == null){
