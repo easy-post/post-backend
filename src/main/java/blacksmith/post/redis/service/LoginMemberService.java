@@ -81,8 +81,8 @@ public class LoginMemberService {
         cookieBuilder.domain(SESSION_COOKIE_DOMAIN);
 
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-        response.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET,POST");
         response.setHeader("Access-Control-Allow-Origin", "https://post-react.onrender.com");
         response.addCookie(cookie);
         response.setHeader("Set-Cookie", cookieBuilder.build().toString());
