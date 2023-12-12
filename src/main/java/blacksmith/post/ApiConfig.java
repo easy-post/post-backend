@@ -20,8 +20,7 @@ public class ApiConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("https://post-react.onrender.com")
                 .allowCredentials(true)
-                .allowedMethods("GET", "POST", "OPTIONS")
-                .allowedHeaders("Content-Type", "Credentials")
-                .exposedHeaders("Set-Cookie");
+                .allowedMethods("GET","HEAD","OPTIONS","POST","PUT")
+                .allowedHeaders("Access-Control-Allow-Headers", "Origin","Accept", "X-Requested-With", "Content-Type", "Access-Control-Request-Method", "Access-Control-Request-Headers");
     }
 }
