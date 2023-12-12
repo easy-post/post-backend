@@ -72,11 +72,12 @@ public class LoginMemberService {
         ResponseCookie.ResponseCookieBuilder cookieBuilder = from(SESSION_COOKIE_NAME, sessionId);
 
         Cookie cookie = new Cookie("hi", "hello");
+        cookie.setDomain(SESSION_COOKIE_DOMAIN);
         cookieBuilder.maxAge(maxAgeSeconds);
         cookieBuilder.secure(true);
         cookieBuilder.sameSite("None");
         cookieBuilder.path("/");
-        cookieBuilder.httpOnly(false);
+        cookieBuilder.httpOnly(true);
         cookieBuilder.domain(SESSION_COOKIE_DOMAIN);
 
         response.setHeader("Access-Control-Allow-Credentials", "true");
