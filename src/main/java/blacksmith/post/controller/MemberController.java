@@ -1,5 +1,6 @@
 package blacksmith.post.controller;
 
+import blacksmith.post.domain.dtos.SuccessDto;
 import blacksmith.post.domain.dtos.member.*;
 import blacksmith.post.exceptions.member.*;
 import blacksmith.post.redis.service.LoginMemberService;
@@ -51,7 +52,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public void login(@Validated @RequestBody MemberLoginDto loginDto, BindingResult bindingResult, HttpServletResponse response){
+    public SuccessDto login(@Validated @RequestBody MemberLoginDto loginDto, BindingResult bindingResult, HttpServletResponse response){
 
         memberService.login(loginDto, response);
         if(bindingResult.hasErrors()){
@@ -64,18 +65,18 @@ public class MemberController {
             throw new MemberInvalidLoginException("아이디나 패스워드가 일치하지 않습니다.");
         }
 
-        return;
+        return new SuccessDto(true);
     }
 
     @GetMapping("/valid-login")
-    public void validLogin(@CookieValue(name = SESSION_COOKIE_NAME, required = false) String sessionId , HttpServletResponse response){
+    public SuccessDto validLogin(@CookieValue(name = SESSION_COOKIE_NAME, required = false) String sessionId , HttpServletResponse response){
         log.info("sessionId : {}", sessionId);
         if(sessionId == null){
             throw new MemberNotLoginException("로그인 한 상태가 아닙니다.");
         }
         Optional<MemberInfoDto> loginMemberInfo = memberService.getLoginMember(sessionId, response);
         if(loginMemberInfo.isPresent()){
-            return;
+            return new SuccessDto(true);
         }else {
             throw new MemberNotLoginException("다시 로그인 해 주세요.");
         }
