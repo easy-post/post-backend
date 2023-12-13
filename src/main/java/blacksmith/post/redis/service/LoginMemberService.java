@@ -23,7 +23,7 @@ public class LoginMemberService {
 
     public static final String SESSION_COOKIE_NAME = "sessionId";
     private static final int SESSION_EXPIRATION_TIME = 99999999;
-    private static final String SESSION_COOKIE_DOMAIN = "post-react.onrender.com";
+    private static final String SESSION_COOKIE_DOMAIN = "easypostapp.com";
 
     public LoginMemberService(LoginMemberRepository loginMemberRepository) {
         this.loginMemberRepository = loginMemberRepository;
