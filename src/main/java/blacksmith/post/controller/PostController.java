@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+import static blacksmith.post.redis.service.LoginMemberService.SESSION_COOKIE_NAME;
+
 @RestController
 @RequestMapping("/post")
 @RequiredArgsConstructor
@@ -27,11 +29,11 @@ public class PostController {
 
 //    글을 쓰는 도중에 로그아웃되서 로그인 해야하는.. 그거를 좀 리액트쪽에서 React.memo 이런 걸로 되나? 글을 기억시키는?
     @PostMapping("/save")
-    public PostSaveResultDto save(@RequestBody PostDto postDto, HttpServletResponse response){
-        if(postDto.getSessionId() == null){
+    public PostSaveResultDto save(@CookieValue(name = SESSION_COOKIE_NAME) String sessionId, @RequestBody PostDto postDto, HttpServletResponse response){
+        if(sessionId == null){
             throw new MemberNotLoginException("다시 로그인 해 주세요.");
         }
-        Optional<MemberInfoDto> loginMember = memberService.getLoginMember(postDto.getSessionId(), response);
+        Optional<MemberInfoDto> loginMember = memberService.getLoginMember(sessionId, response);
         if(loginMember.isEmpty()){
             throw new MemberNotLoginException("다시 로그인 해 주세요.");
         }
@@ -59,12 +61,12 @@ public class PostController {
         return postService.getPostElements(condition, pageable);
     }
 
-    @PostMapping("/member")
-    public Page<PostListElementDto> getPostElsByMemberId(@RequestBody PostListBySessionDto postListBySession, HttpServletResponse response){
-        Optional<MemberInfoDto> loginMember = memberService.getLoginMember(postListBySession.getSessionId(), response);
+    @GetMapping("/member")
+    public Page<PostListElementDto> getPostElsByMemberId(@CookieValue(name = SESSION_COOKIE_NAME) String sessionId,Pageable pageable, HttpServletResponse response){
+        Optional<MemberInfoDto> loginMember = memberService.getLoginMember(sessionId, response);
         if(loginMember.isEmpty()){
             throw new MemberNotLoginException("다시 로그인 해 주세요.");
         }
-        return postService.getPostElementsByMember(loginMember.get(), postListBySession.getPageable());
+        return postService.getPostElementsByMember(loginMember.get(), pageable);
     }
 }
