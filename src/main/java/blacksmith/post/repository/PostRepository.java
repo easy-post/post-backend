@@ -20,6 +20,6 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostCustomRep
     @Query(countQuery = "select p from Post p where p.member.id = :memberId")
     public Page<Post> findByMember(@Param("memberId") Long memberId,Pageable pageable);
 
-    @Query("select p from Post p join fetch p.member m on m.id = :memberId")
-    public Optional<Post> findByIdAndMemberId(Long postId, Long memberId);
+    @Query("select p from Post p join fetch p.member m on m.id = :memberId where p.id = :postId")
+    public Optional<Post> findByIdAndMemberId(@Param("postId") Long postId, @Param("memberId") Long memberId);
 }
