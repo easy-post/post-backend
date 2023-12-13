@@ -78,6 +78,11 @@ public class LoginMemberService {
         cookieBuilder.httpOnly(true);
         cookieBuilder.domain(SESSION_COOKIE_DOMAIN);
 
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+        response.setHeader("Access-Control-Allow-Origin", "https://post-react.onrender.com");
+        
         response.setHeader("Set-Cookie", cookieBuilder.build().toString());
         log.info("cookie: {}",cookieBuilder.build().toString());
         return cookieBuilder.build().toString();
