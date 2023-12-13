@@ -57,7 +57,7 @@ public class PostRepositoryImpl implements PostCustomRepository{
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        TypedQuery<Long> countQuery = em.createQuery("select count(p) from Post p where p.member = :memberId", Long.class)
+        TypedQuery<Long> countQuery = em.createQuery("select count(p) from Post p where p.member.id = :memberId", Long.class)
                 .setParameter("memberId", memberId);
 
         return PageableExecutionUtils.getPage(postEls, pageable,countQuery::getSingleResult);

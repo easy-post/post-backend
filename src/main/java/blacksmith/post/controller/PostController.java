@@ -62,7 +62,7 @@ public class PostController {
     }
 
     @GetMapping("/member")
-    public Page<PostListElementDto> getPostElsByMemberId(@CookieValue(name = SESSION_COOKIE_NAME) String sessionId,Pageable pageable, HttpServletResponse response){
+    public Page<PostListElementDto> getPostElsByMemberId(@CookieValue(name = SESSION_COOKIE_NAME) String sessionId, Pageable pageable, HttpServletResponse response){
         Optional<MemberInfoDto> loginMember = memberService.getLoginMember(sessionId, response);
         if(loginMember.isEmpty()){
             throw new MemberNotLoginException("다시 로그인 해 주세요.");
