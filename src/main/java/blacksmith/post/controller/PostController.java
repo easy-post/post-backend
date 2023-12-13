@@ -58,6 +58,8 @@ public class PostController {
     @GetMapping
     public Page<PostListElementDto> getPostEls(PostSearchCondition condition, Pageable pageable, HttpServletRequest request){
         log.info("uri : {}", request.getRequestURI());
+        if(condition.getNickname().isBlank()) condition.setNickname(null);
+        if(condition.getTitle().isBlank()) condition.setTitle(null);
         return postService.getPostElements(condition, pageable);
     }
 
