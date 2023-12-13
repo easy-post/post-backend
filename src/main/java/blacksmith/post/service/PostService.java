@@ -58,7 +58,7 @@ public class PostService {
 
     @Transactional
     public void update(Long memberId, Long postId, PostDto postDto){
-        Optional<Post> postOne = postRepository.findByIdAndMember(memberId, postId);
+        Optional<Post> postOne = postRepository.findByIdAndMemberId(memberId, postId);
         if(postOne.isEmpty()){
             throw new PostException("게시글 혹은 계정을 다시 확인해 주세요.");
         }
