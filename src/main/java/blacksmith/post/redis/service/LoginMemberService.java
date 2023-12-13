@@ -22,7 +22,7 @@ public class LoginMemberService {
     private final LoginMemberRepository loginMemberRepository;
 
     public static final String SESSION_COOKIE_NAME = "sessionId";
-    private static final int SESSION_EXPIRATION_TIME = 99999999;
+    private static final int SESSION_EXPIRATION_TIME = 1800;
     private static final String SESSION_COOKIE_DOMAIN = "easypostapp.com";
 
     public LoginMemberService(LoginMemberRepository loginMemberRepository) {
@@ -71,8 +71,8 @@ public class LoginMemberService {
     private static String updateCookieTime(String sessionId, int maxAgeSeconds, HttpServletResponse response) {
         ResponseCookie.ResponseCookieBuilder cookieBuilder = from(SESSION_COOKIE_NAME, sessionId);
 
-        Cookie cookie = new Cookie("hi", "hello");
-        cookie.setDomain(SESSION_COOKIE_DOMAIN);
+//        Cookie cookie = new Cookie("hi", "hello");
+//        cookie.setDomain(SESSION_COOKIE_DOMAIN);
         cookieBuilder.maxAge(maxAgeSeconds);
         cookieBuilder.secure(true);
         cookieBuilder.sameSite("None");
@@ -80,11 +80,11 @@ public class LoginMemberService {
         cookieBuilder.httpOnly(true);
         cookieBuilder.domain(SESSION_COOKIE_DOMAIN);
 
-        response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Headers", "*");
-        response.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-        response.setHeader("Access-Control-Allow-Origin", "https://post-react.onrender.com");
-        response.addCookie(cookie);
+//        response.setHeader("Access-Control-Allow-Credentials", "true");
+//        response.setHeader("Access-Control-Allow-Headers", "*");
+//        response.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+//        response.setHeader("Access-Control-Allow-Origin", "https://post-react.onrender.com");
+//        response.addCookie(cookie);
         response.setHeader("Set-Cookie", cookieBuilder.build().toString());
         log.info("cookie: {}",cookieBuilder.build().toString());
         return cookieBuilder.build().toString();

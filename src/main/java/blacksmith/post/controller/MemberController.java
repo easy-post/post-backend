@@ -51,10 +51,7 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public LoginSessionDto login(@Validated @RequestBody MemberLoginDto loginDto, BindingResult bindingResult, HttpServletResponse response, HttpServletRequest request){
-        log.info("host name url: {}", request.getRequestURL());
-        log.info("host name uri: {}", request.getRequestURI());
-        log.info("host header: {}", request.getHeader("Host"));
+    public void login(@Validated @RequestBody MemberLoginDto loginDto, BindingResult bindingResult, HttpServletResponse response){
 
         memberService.login(loginDto, response);
         if(bindingResult.hasErrors()){
@@ -67,7 +64,7 @@ public class MemberController {
             throw new MemberInvalidLoginException("아이디나 패스워드가 일치하지 않습니다.");
         }
 
-        return sessionDto.get();
+        return;
     }
 
     @GetMapping("/valid-login")
