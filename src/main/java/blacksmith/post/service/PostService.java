@@ -7,6 +7,7 @@ import blacksmith.post.domain.dtos.post.PostDto;
 import blacksmith.post.domain.dtos.post.PostListElementDto;
 import blacksmith.post.domain.dtos.post.PostSearchCondition;
 import blacksmith.post.exceptions.member.MemberNotExistException;
+import blacksmith.post.exceptions.post.PostException;
 import blacksmith.post.repository.MemberRepository;
 import blacksmith.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +39,7 @@ public class PostService {
         return post.getId();
     }
 
-    public Optional<PostDto> getPostOne(String postId){
+    public Optional<PostDto> getPostOne(Long postId){
         Optional<Post> post =postRepository.findFetch(postId);
         if(post.isPresent()){
             return Optional.of(new PostDto(post.get()));
@@ -51,5 +53,16 @@ public class PostService {
 
     public Page<PostListElementDto> getPostElementsByMember(MemberInfoDto memberInfo, Pageable pageable){
         return postRepository.getPostListByMemberId(memberInfo.getId(), pageable);
+    }
+
+
+    @Transactional
+    public void update(Long memberId, Long postId, PostDto postDto){
+        Optional<Post> postOne = postRepository.findByIdAndMember(memberId, postId);
+        if(postOne.isEmpty()){
+            throw new PostException("게시글 혹은 계정을 다시 확인해 주세요.");
+        }
+
+        postOne.get().updateContent(postDto.getTitle(), postDto.getHtml());
     }
 }

@@ -15,8 +15,10 @@ import java.util.Optional;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long>, PostCustomRepository {
     @Query("select p from Post p join fetch p.member m where p.id = :postId")
-    public Optional<Post> findFetch(@Param("postId") String postId);
+    public Optional<Post> findFetch(@Param("postId") Long postId);
 
-    @Query(countQuery = "select p from Post p where p.member = :memberId")
+    @Query(countQuery = "select p from Post p where p.member.id = :memberId")
     public Page<Post> findByMember(@Param("memberId") Long memberId,Pageable pageable);
+
+    public Optional<Post> findByIdAndMember(Long postId, Long MemberId);
 }

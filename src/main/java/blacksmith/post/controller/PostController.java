@@ -1,9 +1,11 @@
 package blacksmith.post.controller;
 
 
+import blacksmith.post.domain.dtos.SuccessDto;
 import blacksmith.post.domain.dtos.member.MemberInfoDto;
 import blacksmith.post.domain.dtos.post.*;
 import blacksmith.post.exceptions.member.MemberNotLoginException;
+import blacksmith.post.exceptions.post.PostIsNotMineException;
 import blacksmith.post.exceptions.post.PostNotExistException;
 import blacksmith.post.service.MemberService;
 import blacksmith.post.service.PostService;
@@ -46,7 +48,7 @@ public class PostController {
     }
 
     @GetMapping("/{postId}")
-    public PostDto getPost(@PathVariable("postId") String postId){
+    public PostDto getPost(@PathVariable("postId") Long postId){
         Optional<PostDto> post = postService.getPostOne(postId);
         if(post.isEmpty()){
             throw new PostNotExistException("해당 게시글은 존재하지 않습니다.");
@@ -78,4 +80,43 @@ public class PostController {
         }
         return postService.getPostElementsByMember(loginMember.get(), pageable);
     }
+
+    @GetMapping("{postId}/edit")
+    public PostDto checkIsMyPost(@CookieValue(name = SESSION_COOKIE_NAME) String sessionId, @PathVariable("postId") Long postId, HttpServletResponse response){
+        Optional<MemberInfoDto> loginMember = memberService.getLoginMember(sessionId, response);
+        Optional<PostDto> postOne = postService.getPostOne(postId);
+
+        validMemberAndPost(loginMember, postOne);
+
+        return postOne.get();
+    }
+
+
+    @PostMapping("{postId}/edit")
+    public PostSaveResultDto updatePost(@CookieValue(name = SESSION_COOKIE_NAME)String sessionId, @PathVariable("postId") Long postId, PostDto postDto,HttpServletResponse response){
+        Optional<MemberInfoDto> loginMember = memberService.getLoginMember(sessionId, response);
+
+        if(loginMember.isEmpty()){
+            throw new MemberNotLoginException("다시 로그인 해 주세요.");
+        }
+        postService.update(loginMember.get().getId(), postId, postDto);
+        return new PostSaveResultDto(postId, true);
+    }
+
+    private void validMemberAndPost(Optional<MemberInfoDto> loginMember, Optional<PostDto> postOne){
+        if(loginMember.isEmpty()){
+            throw new MemberNotLoginException("다시 로그인 해 주세요.");
+        }
+
+        if(postOne.isEmpty()){
+            throw new PostNotExistException("해당 게시글은 존재하지 않습니다.");
+        }
+
+        if(!loginMember.get().getId().equals(postOne.get().getMemberInfoDto().getId())){
+            throw new PostIsNotMineException("로그인 한 사용자의 게시글이 아닙니다.");
+        }
+    }
+
+
+
 }
