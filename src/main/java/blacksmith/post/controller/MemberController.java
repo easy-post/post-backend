@@ -51,7 +51,8 @@ public class MemberController {
     }
 
     @PostMapping("/login")
-    public LoginSessionDto login(@Validated @RequestBody MemberLoginDto loginDto, BindingResult bindingResult, HttpServletResponse response){
+    public LoginSessionDto login(@Validated @RequestBody MemberLoginDto loginDto, BindingResult bindingResult, HttpServletResponse response, HttpServletRequest request){
+        log.info("host name : {}", request.getRequestURL());
         memberService.login(loginDto, response);
         if(bindingResult.hasErrors()){
             throw new MemberLoginValidException("입력값을 다시 확인 해 주세요.");
