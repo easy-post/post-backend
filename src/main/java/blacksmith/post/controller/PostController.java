@@ -60,11 +60,12 @@ public class PostController {
         log.info("uri : {}", request.getRequestURI());
         String title = condition.getTitle();
         String nickname = condition.getNickname();
+
         if(title != null){
-            if(title.isBlank()) condition.setNickname(null);
+            if(title.isBlank()) condition.setTitle(null);
         }
         if(nickname != null){
-            if(nickname.isBlank()) condition.setTitle(null);
+            if(nickname.isBlank()) condition.setNickname(null);
         }
         return postService.getPostElements(condition, pageable);
     }
