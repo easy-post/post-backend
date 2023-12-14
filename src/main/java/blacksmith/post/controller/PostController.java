@@ -81,7 +81,7 @@ public class PostController {
         return postService.getPostElementsByMember(loginMember.get(), pageable);
     }
 
-    @GetMapping("{postId}/edit")
+    @GetMapping("/{postId}/edit")
     public PostDto checkIsMyPost(@CookieValue(name = SESSION_COOKIE_NAME) String sessionId, @PathVariable("postId") Long postId, HttpServletResponse response){
         Optional<MemberInfoDto> loginMember = memberService.getLoginMember(sessionId, response);
         Optional<PostDto> postOne = postService.getPostOne(postId);
@@ -92,7 +92,7 @@ public class PostController {
     }
 
 
-    @PostMapping("{postId}/edit")
+    @PostMapping("/{postId}/edit")
     public PostSaveResultDto updatePost(@CookieValue(name = SESSION_COOKIE_NAME)String sessionId, @PathVariable("postId") Long postId, @RequestBody PostDto postDto,HttpServletResponse response){
         log.info("html : {}",postDto.getHtml());
         log.info("sessionId : {}",sessionId);
@@ -120,7 +120,4 @@ public class PostController {
             throw new PostIsNotMineException("로그인 한 사용자의 게시글이 아닙니다.");
         }
     }
-
-
-
 }
