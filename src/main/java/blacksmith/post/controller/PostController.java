@@ -94,6 +94,10 @@ public class PostController {
 
     @PostMapping("{postId}/edit")
     public PostSaveResultDto updatePost(@CookieValue(name = SESSION_COOKIE_NAME)String sessionId, @PathVariable("postId") Long postId, PostDto postDto,HttpServletResponse response){
+        log.info("html : {}",postDto.getHtml());
+        log.info("sessionId : {}",sessionId);
+        log.info("postId : {}",postId);
+
         Optional<MemberInfoDto> loginMember = memberService.getLoginMember(sessionId, response);
 
         if(loginMember.isEmpty()){
