@@ -21,5 +21,5 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostCustomRep
     public Page<Post> findByMember(@Param("memberId") Long memberId,Pageable pageable);
 
     @Query("select p from Post p join p.member m where p.id = :postId and m.id = :memberId")
-    public Optional<Post> findByIdAndMemberId(@Param("postId") Long postId, @Param("memberId") Long memberId);
+    public Optional<Post> findByIdAndMemberId(@Param("memberId") Long memberId, @Param("postId") Long postId);
 }
