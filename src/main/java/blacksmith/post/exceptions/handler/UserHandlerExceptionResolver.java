@@ -40,9 +40,8 @@ public class UserHandlerExceptionResolver implements HandlerExceptionResolver {
                 }
             }
         } catch(IOException e){
-            log.error("Member Exception Resolver Error",e);
+            log.error("User Exception Resolver Error",e);
         }
-
 
         return null;
     }

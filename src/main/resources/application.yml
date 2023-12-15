@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://dpg-clml8effeb2c73e8r4qg-a.singapore-postgres.render.com/post_wws2
-    username: post_wws2_user
-    password: e7XBsjEXI8sHdFY3TQmsfoU6xZRSAJiF
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
   data:
     redis:
