@@ -28,7 +28,6 @@ public class MemberController {
     private final MemberService memberService;
     private final LoginMemberService loginMemberService;
 
-
     @PostMapping("/register")
     public ValidDto register(@Validated @RequestBody MemberRegisterDto registerDto, BindingResult bindingResult){
         log.info(registerDto.toString());
@@ -53,8 +52,6 @@ public class MemberController {
 
     @PostMapping("/login")
     public SuccessDto login(@Validated @RequestBody MemberLoginDto loginDto, BindingResult bindingResult, HttpServletResponse response){
-
-        memberService.login(loginDto, response);
         if(bindingResult.hasErrors()){
             throw new MemberLoginValidException("입력값을 다시 확인 해 주세요.");
         }
@@ -84,7 +81,7 @@ public class MemberController {
 
 
     @GetMapping("/logout")
-    public void logout(@CookieValue(name = SESSION_COOKIE_NAME, required = false) String sessionId, HttpServletRequest request, HttpServletResponse response){
+    public void logout(@CookieValue(name = SESSION_COOKIE_NAME, required = false) String sessionId, HttpServletResponse response){
         memberService.expireLoginSession(sessionId, response);
     }
 }

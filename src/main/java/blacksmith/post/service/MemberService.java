@@ -7,6 +7,7 @@ import blacksmith.post.domain.dtos.member.MemberLoginDto;
 import blacksmith.post.domain.dtos.member.MemberRegisterDto;
 import blacksmith.post.exceptions.hash.HashNoSuchAlgorithmException;
 import blacksmith.post.exceptions.member.MemberLoginIdDuplicateException;
+import blacksmith.post.exceptions.member.MemberNicknameDuplicateException;
 import blacksmith.post.redis.service.LoginMemberService;
 import blacksmith.post.repository.MemberRepository;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,7 +31,7 @@ public class MemberService {
     public void register(MemberRegisterDto registerDto) {
         Optional<Member> memberForcheck = memberRepository.findByLoginId(registerDto.getLoginId());
         if(memberForcheck.isPresent()){
-            log.info("member loginid : ", memberForcheck.get().getLoginId());
+            log.info("member loginid : {}", memberForcheck.get().getLoginId());
             throw new MemberLoginIdDuplicateException("해당 아이디는 이미 존재합니다.");
         }
 
@@ -50,7 +51,7 @@ public class MemberService {
     public boolean validDuplicateNickname(String nickname){
         Optional<Member> memberForcheck = memberRepository.findByNickname(nickname);
         if(memberForcheck.isPresent()){
-            return false;
+            throw new MemberNicknameDuplicateException("중복된 닉네임 입니다.");
         }
         return true;
     }
